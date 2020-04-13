@@ -1,0 +1,30 @@
+﻿{
+  "connectionString": "mongodb://localhost:27017/reanimacall",
+  "usersPopulation": [
+    {
+      "phone": "+33685049061",
+      "hash": "$2a$10$Ihvl.kksEYlW4fB098Fj1OQ9Hlvm4W28KsJK3yjod3gDUglvCvYSC",
+      "contacts": {
+        "phone": "+33684473313",
+        "alreadyContacted": false
+      }
+    }
+  ],
+  "secret": "L1f3S4v3r",
+  "resetDatabase": false,
+  "voice": {
+    "normal": {
+      "voice": "alice",
+      "language": "fr-FR"
+    },
+    "loop": {
+      "voice": "alice",
+      "language": "fr-FR",
+      "loop": 3
+    }
+  },
+  "messages": {
+    "errorOccurred": "Une erreur est survenue. Merci de contacter Jules, le développeur de cette application, au  + 33 06 85 04 90 61"
+  }
+}
+
