@@ -1,6 +1,6 @@
 const VoiceResponse = require('twilio').twiml.VoiceResponse;
-const LOG = require('morgan');
 const {voice, messages} = require('../../../config');
+const UserService = require("../../../users/user.service");
 
 module.exports = {
     welcome,
@@ -35,22 +35,25 @@ async function createAccount(fromNumber, digits) {
 
     const twiml = new VoiceResponse();
 
-    await Promise.all([
-        // Create a user. if the user is already created, send an error.
-        UserService
-            .create({phone: fromNumber, pin: digits})
-            .then(() => {
-                    console.log("Compte créé");
-                    twiml.say(voice.normal,
-                        `Votre compte a été créé avec le pin ${digits}. Merci et au revoir.`);
-                }
-            )
-            .catch(() => {
-                    console.log("Compte non créé");
-                    twiml.say(voice.normal, messages.errorOccurred);
-                }
-            )
-    ]);
+    // Create a user. if the user is already created, send an error.
+    await UserService
+        .create({phone: fromNumber, pin: digits})
+        .then(() => {
+                console.log("Compte créé");
+                twiml.say(voice.normal,
+                    `Votre compte a été créé avec le pin ${digits}. Merci et au revoir.`);
+            }
+        )
+        .catch(() => {
+                console.log("Compte non créé");
+                twiml.say(voice.normal, messages.errorOccurred);
+            }
+        );
+
+    // TODO ask for adding contacts
 
     return twiml.toString();
 }
+
+//    await UserService.addContacts(fromNumber, ["+336844473313", "+33756617277", "+33684433473313", "+337566174277"]);
+//     console.log(await UserService.getContacts(fromNumber));

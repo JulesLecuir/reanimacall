@@ -1,6 +1,4 @@
 const VoiceResponse = require('twilio').twiml.VoiceResponse;
-
-
 const {voice, messages} = require('../../../config');
 const UserService = require('../../../users/user.service');
 

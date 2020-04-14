@@ -6,18 +6,34 @@ module.exports = {
     getAll,
     getById,
     getByPhoneNumber,
+    addContacts,
+    getContacts,
     isAlreadyRegistered,
     create,
     update,
     delete: _delete
 };
 
-async function authenticate({ phone, pin }) {
-    const user = await User.find({ phone: phone }, { hash: true, contacts: true}).limit(1);
+async function authenticate({phone, pin}) {
+    const user = await User.find({phone: phone}, {hash: true, isActive: true}).limit(1);
     if (user && bcrypt.compareSync(pin, user.hash)) {
-        const contacts = user.toObject().contacts;
-        return contacts;
+        User.updateOne({phone: phone}, {isWaiting: true});
+        return true;
     }
+}
+
+// const contacts = user.toObject().contacts;
+// return contacts || {};
+
+async function addContacts(phone, contactsArray) {
+    const res = await User.updateOne({phone: phone}, {contacts: contactsArray});
+    return res.nModified;
+}
+
+// TODO add hash for validation
+async function getContacts(phone) {
+    const user = await User.find({phone: phone}).limit(1);
+    return user[0].contacts;
 }
 
 async function getAll() {
@@ -32,13 +48,13 @@ async function getByPhoneNumber(number) {
     return await User.findOne({phone: number}).select('-hash');
 }
 
-function isAlreadyRegistered(number) {
-    return User.find({phone: number}, {phone: true}).limit(1);
+async function isAlreadyRegistered(number) {
+    return await User.exists({phone: number});
 }
 
 async function create(userParam) {
     // validate
-    if (await User.findOne({ phone: userParam.phone })) {
+    if (await User.exists({phone: userParam.phone})) {
         throw 'Phone "' + userParam.phone + '" is already taken';
     }
 
@@ -46,7 +62,7 @@ async function create(userParam) {
 
     // hash pin
     if (userParam.pin) {
-        user.hash = bcrypt.hashSync(userParam.pin, 12);
+        user.hash = bcrypt.hashSync(userParam.pin, 10);
     }
 
     // save user

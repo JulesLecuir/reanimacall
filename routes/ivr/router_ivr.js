@@ -11,8 +11,8 @@ const { welcome, redirectWelcome } = require('./handler_welcome');
 /*
  * POST: /ivr/welcome
  */
-router.post('/welcome', (req, res) => {
-  res.send(welcome(req.body.From));
+router.post('/welcome', async (req, res) => {
+  res.send(await welcome(req.body.From));
 });
 
 /*
