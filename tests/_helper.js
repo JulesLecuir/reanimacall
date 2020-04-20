@@ -1,6 +1,7 @@
+// TODO try if a test db can work this way
 module.exports = {
     countWord
-}
+};
 
 /**
  * Counts how many times a word is repeated
@@ -13,3 +14,4 @@ function countWord(paragraph) {
         return (paragraph.split(regex).length - 1);
     };
 }
+

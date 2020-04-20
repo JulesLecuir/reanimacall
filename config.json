@@ -1,5 +1,8 @@
 ﻿{
-  "connectionString": "mongodb://localhost:27017/reanimacall",
+  "db": {
+    "dev": "reanimacall",
+    "test": "reanimacall_test"
+  },
   "usersPopulation": [
     {
       "phone": "+33685049061",
@@ -10,7 +13,6 @@
       }
     }
   ],
-  "secret": "L1f3S4v3r",
   "resetDatabase": false,
   "voice": {
     "normal": {

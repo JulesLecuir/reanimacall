@@ -5,15 +5,16 @@
  */
 
 const app = require('../app');
-const db = require('../_helpers/db');
+const _db = require('../_helpers/db');
 const debug = require('debug')('reanimacall:server');
+const config = require('./../config');
 const http = require('http');
 
 /**
  * Get port from environment and store in Express.
  */
 
-const port = normalizePort(process.env.PORT || '3000');
+const port = normalizePort(process.env.PORT || 3000);
 app.set('port', port);
 
 /**
@@ -25,10 +26,12 @@ const server = http.createServer(app);
 /**
  * Listen on provided port, on all network interfaces.
  */
-
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+_db.connect(config.db.test)
+    .then(() => {
+        server.listen(port);
+        server.on('error', onError);
+        server.on('listening', onListening);
+    });
 
 /**
  * Normalize a port into a number, string, or false.

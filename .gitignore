@@ -17,3 +17,6 @@ coverage
 
 # Benchmarking
 benchmarks/graphs
+
+# Environment variables
+/.env

@@ -15,15 +15,16 @@ module.exports = {
 };
 
 async function authenticate({phone, pin}) {
-    const user = await User.find({phone: phone}, {hash: true, isActive: true}).limit(1);
-    if (user && bcrypt.compareSync(pin, user.hash)) {
-        User.updateOne({phone: phone}, {isWaiting: true});
+    if (typeof phone !== 'string' || typeof pin !== 'string')
+        throw TypeError();
+    const userQuery = await User.find({phone: phone}, {hash: true, isActive: true}).limit(1);
+    if (userQuery[0] && bcrypt.compareSync(pin, userQuery[0].hash)) {
+        await User.updateOne({phone: phone}, {isWaiting: true, isWaitingSince: Date.now()});
         return true;
+    } else {
+        return false;
     }
 }
-
-// const contacts = user.toObject().contacts;
-// return contacts || {};
 
 async function addContacts(phone, contactsArray) {
     const res = await User.updateOne({phone: phone}, {contacts: contactsArray});
@@ -32,8 +33,8 @@ async function addContacts(phone, contactsArray) {
 
 // TODO add hash for validation
 async function getContacts(phone) {
-    const user = await User.find({phone: phone}).limit(1);
-    return user[0].contacts;
+    const user = (await getByPhoneNumber(phone));
+    return user.contacts;
 }
 
 async function getAll() {
@@ -45,7 +46,7 @@ async function getById(id) {
 }
 
 async function getByPhoneNumber(number) {
-    return await User.findOne({phone: number}).select('-hash');
+    return (await User.find({phone: number}, {hash: false}).limit(1))[0];
 }
 
 async function isAlreadyRegistered(number) {
@@ -69,12 +70,12 @@ async function create(userParam) {
     await user.save();
 }
 
-async function update(id, userParam) {
-    const user = await User.findById(id);
+async function update(phone, userParam) {
+    const user = await getByPhoneNumber(phone);
 
     // validate
     if (!user) throw 'User not found';
-    if (user.phone !== userParam.phone && await User.findOne({ phone: userParam.phone })) {
+    if (user.phone !== userParam.phone && await User.findOne({phone: userParam.phone})) {
         throw 'Phone "' + userParam.phone + '" is already taken';
     }
 

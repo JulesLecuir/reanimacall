@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
     createdDate: {type: Date, default: Date.now},
     contacts: {type: Array, default: []},
     isWaiting: {type: Boolean, default: false},
+    isWaitingSince: {type: Date},
     currentCallerId: {type: String}
 });
 
