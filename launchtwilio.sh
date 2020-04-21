@@ -11,8 +11,18 @@ updatwilio(){
 	twilio phone-numbers:update $PHONE_NUMBER_ID --voice-url=$url
 }
 
+# Start NGROK in background
 ~/ngrok http 3000 &
-sleep 6
+
+# Sleep while NGROK makes a connection
+sleep 8
+
+# Start MongoDB service
+sudo systemctl start mogod
+
+# Update the Twilio voice URL with the new NGROK link
 updatwilio /ivr/welcome
+
+# Display the PID of NGROK for convenience
 ps ax | grep /home/$USER/ngrok
 
