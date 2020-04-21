@@ -18,7 +18,7 @@ updatwilio(){
 sleep 8
 
 # Start MongoDB service
-sudo systemctl start mogod
+sudo systemctl start mongod
 
 # Update the Twilio voice URL with the new NGROK link
 updatwilio /ivr/welcome
