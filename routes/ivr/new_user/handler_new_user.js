@@ -1,6 +1,7 @@
 const VoiceResponse = require('twilio').twiml.VoiceResponse;
 const {voice, messages} = require('../../../config');
 const UserService = require("../../../users/user.service");
+const {spaceBetweenEachLetter} = require("../../../_helpers/formatter");
 
 module.exports = {
     welcome,
@@ -23,9 +24,9 @@ function welcome(fromNumberFormatted) {
             },
             'Bonjour. ' +
             'Vous nous appelez depuis le numéro ' + fromNumberFormatted + '.' +
-            'Si vous souhaitez créer un compte, veillez choisir un nouveau code PIN. Ce code PIN vous servira ' +
+            'Si vous souhaitez créer un compte, veillez choisir un nouveau code PINE. Ce code PINE vous servira ' +
             'pour vous authentifier ultérieurement lorsque vous appellerez avec ce numéro. Vous pouvez maintenant ' +
-            'taper votre code PIN, puis appuyer sur dièse pour valider votre inscription.'
+            'taper votre code PINE, puis appuyer sur dièse pour valider votre inscription.'
         );
 
     return twiml.toString();
@@ -34,26 +35,27 @@ function welcome(fromNumberFormatted) {
 async function createAccount(fromNumber, digits) {
 
     const twiml = new VoiceResponse();
-
+    console.log(spaceBetweenEachLetter(digits));
     // Create a user. if the user is already created, send an error.
-    await UserService
-        .create({phone: fromNumber, pin: digits})
-        .then(() => {
-                console.log("Compte créé");
-                twiml.say(voice.normal,
-                    `Votre compte a été créé avec le pin ${digits}. Merci et au revoir.`);
-            }
-        )
-        .catch(() => {
-                console.log("Compte non créé");
-                twiml.say(voice.normal, messages.errorOccurred);
-            }
-        );
+    await Promise.all([
+        UserService
+            .create({phone: fromNumber, pin: digits})
+            .then(() => {
+                    console.log("Compte créé");
+                    twiml.say(voice.normal,
+                        `Votre compte a été créé avec le pine, ${spaceBetweenEachLetter(digits)}. Merci et au revoir.`);
+                }
+            )
+            .catch((err) => {
+                    console.error("ERROR: " + err);
+                    twiml.say(voice.normal, messages.errorOccurred);
+                }
+            )
+    ]);
 
-    // TODO ask for adding contacts
+    //  TODO ask for adding contacts
 
     return twiml.toString();
 }
 
 //    await UserService.addContacts(fromNumber, ["+336844473313", "+33756617277", "+33684433473313", "+337566174277"]);
-//     console.log(await UserService.getContacts(fromNumber));
