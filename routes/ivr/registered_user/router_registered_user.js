@@ -9,6 +9,7 @@ router.post('/authPin', async (req, res) => {
     res.send(await authPin(req.body.From, req.body.Digits));
 });
 
+
 /*
  * POST: /ivr/reg/thankAfterMessage
  */

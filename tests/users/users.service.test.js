@@ -89,6 +89,14 @@ describe('User Service', function () {
             expect(registeredUser.isWaiting).toBeTruthy();
         });
 
+        // TODO update the test so it can handle callSid
+        // it('should be TRUTHY if the phone, pin code and callSid all match', async function () {
+        //     expect(UserService.authenticate({
+        //         phone: fakeUserRegistered.phone,
+        //         pin: fakeUserRegistered.pin
+        //     })).toBeTruthy();
+        // });
+
         // TODO needs to fix the expect assertion with the Date object. Find out a way to compare.
         // it("should set the isWaitingSince parameter to the current Date", async function () {
         //     console.log(await UserService.authenticate({

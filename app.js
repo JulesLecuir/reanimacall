@@ -6,7 +6,7 @@ const logger = require('morgan');
 const indexRouter = require('./routes/router_index');
 
 const ivrRouter = require('./routes/ivr/router_ivr');
-const usersRouter = require('./routes/router_users');
+const usersRouter = require('./routes/users/router_users');
 const app = express();
 
 // load environment variables from .env file
