@@ -26,7 +26,7 @@ const server = http.createServer(app);
 /**
  * Listen on provided port, on all network interfaces.
  */
-_db.connect(config.db.test)
+_db.connect(config.db.dev)
     .then(() => {
         server.listen(port);
         server.on('error', onError);
