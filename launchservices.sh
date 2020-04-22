@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# YOU NEED TO CHANGE THIS NUMBER IF YOU WANT THIS SCRIPT TO WORK FOR YOU
-PHONE_NUMBER_ID='PN401be53f38f60fbcf07ebfc28d03b305'
+# get the $PHONE_NUMBER_ID in the .env file
+source .env
 
 get_ngrok_url() {
 	echo $(curl http://127.0.0.1:4040/api/tunnels | sed -nE 's/.*public_url":"(https:..[^"]*).*/\1/p')

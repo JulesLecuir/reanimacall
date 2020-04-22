@@ -46,24 +46,14 @@ on your computer.
 
 #### Create a `.env` file
 
-The app needs to know some environment variables in order to run. Create a doc with the following variables. The values 
-correspond to my own setup but you can adapt:
+The app needs to know some environment variables in order to run: the MongoDB URL and port to listen to, and your Twilio 
+phone number ID, so that the `launchsservices.sh` script can work properly. 
+Create a doc with those following variables, as below. The values correspond to my own setup, but you can adapt:
 
 ```$xslt
 DB_HOST=mongodb://localhost:27017/
 PORT=3000
-```
-
-#### Change the phone ID in the `launchservices.sh` script
-
-You need to update this number:
-```$xslt 
-#!/bin/bash
-
-# YOU NEED TO CHANGE THIS NUMBER IF YOU WANT THIS SCRIPT TO WORK FOR YOU
-PHONE_NUMBER_ID='PNxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
-...
-...
+PHONE_NUMBER_ID=PNxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
 #### Change the language options and database names in `config.json`
