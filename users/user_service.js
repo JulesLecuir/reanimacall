@@ -1,4 +1,4 @@
-﻿const bcrypt = require('bcryptjs');
+const bcrypt = require('bcryptjs');
 const User = require('./user_model');
 const check = require('./../_helpers/check');
 const LOG = require("../_helpers/LOG");
@@ -30,6 +30,7 @@ async function authenticate({phone, pin, callSid}) {
         // Update the call ID and the status of the customer
         await User.updateOne({phone: phone}, {status: 'asking', callSid: callSid});
         LOG.info('User authenticated.')
+        return true;
     } else {
         throw Error('User not authenticated. Either the user was not found, or the pin code didn\'t match.');
     }
@@ -63,7 +64,15 @@ async function isAlreadyRegistered(number) {
 }
 
 async function create(userParam) {
-    // validate
+
+    // Check data
+    check.str(
+        userParam.phone,
+        userParam.pin,
+        userParam.callSid,
+        ...(Array.isArray(userParam.contacts) ? userParam.contacts : []) // Check contacts if there are any
+    );
+
     if (await User.exists({phone: userParam.phone})) {
         throw 'Phone "' + userParam.phone + '" is already taken';
     }

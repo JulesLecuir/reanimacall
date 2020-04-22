@@ -9,7 +9,7 @@ module.exports = {
                 useCreateIndex: true,
                 useNewUrlParser: true
             })
-            .then(() => LOG.success('Connected to database'))
+            .then(() => LOG.success('Connected to database ' + db_name))
             .catch((err) => LOG.error(err));
         mongoose.Promise = global.Promise;
         return mongoose.connection;
