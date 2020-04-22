@@ -1,20 +1,23 @@
 const express = require('express');
 const router = express.Router();
-const { authPin, thankAfterMessage } = require('./handler_registered_user');
+const {authPin, thankAfterMessage, addContact, processMessage} = require('./handler_registered_user');
 
-/*
- * POST: /ivr/reg/authPin
- */
+
 router.post('/authPin', async (req, res) => {
     res.send(await authPin(req.body.From, req.body.Digits, req.body.CallSid));
 });
 
-
-/*
- * POST: /ivr/reg/thankAfterMessage
- */
 router.post('/thankAfterMessage', async (req, res) => {
     res.send(thankAfterMessage());
+});
+
+router.post('/processMessage', async function (req, res) {
+    // TODO process the message properly
+    res.send(processMessage(req));
+});
+
+router.post('/addContact', async function (req, res) {
+    res.send(await addContact());
 });
 
 module.exports = router;

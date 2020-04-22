@@ -1,13 +1,16 @@
 const VoiceResponse = require('twilio').twiml.VoiceResponse;
 const {voice} = require('../../../config');
-const UserService = require('../../../users/user.service');
+const UserService = require('../../../users/user_service');
 const LOG = require('./../../../_helpers/LOG');
 
 
 module.exports = {
     welcome,
     authPin,
-    thankAfterMessage
+    thankAfterMessage,
+    offerRecordMessage,
+    processMessage,
+    addContact,
 };
 
 function welcome(numberFormatted) {
@@ -17,7 +20,7 @@ function welcome(numberFormatted) {
     twiml
         .gather({
             action: '/ivr/reg/authPin',
-            finishOnKey: '#',
+            finishOnKey: '*#',
             method: 'POST',
         })
         .say(voice.normal,
@@ -42,19 +45,8 @@ async function authPin(phone, pin, callSid) {
             .then(() => {
                     LOG.success("Authentification réussie");
                     // TODO invoke a function if the user presses a key that memorizes that the user doesn't want to hear the messages before leaving a message
-                    twiml.say(voice.normal,
-                        "Merci. Vous pouvez maintenant formuler oralement votre demande. Nous ferons ensuite passer votre message à vos contacts. Sachez également" +
-                        " que pour l'instant, vos messages ne sont pas chiffrés et peuvent faire l'objet d'attaques. Nous " +
-                        "travaillons actuellement sur un système de chiffrement des enregistrements pour une prochaine " +
-                        "version de notre service. Jules Lecuir, développeur de l'application, se dédouanne de tout préjudice," +
-                        "bien qu'il travaille du mieux qu'il peut pour vous apporter son aide! Vous pouvez maintenant parler.");
-                    twiml.record({
-                            action: "/ivr/reg/thankAfterMessage",
-                            recordingStatusCallback: "/users/processMessage",
-                            finishOnKey: '#',
-                            maxLength: 180,
-                        }
-                    )
+                    twiml.say(voice.normal, 'Merci.');
+                    twiml.redirect('/ivr/offerMainMenu');
                 }
             )
             .catch((err) => {
@@ -64,6 +56,27 @@ async function authPin(phone, pin, callSid) {
                 }
             )
     ]);
+
+    return twiml.toString();
+}
+
+function offerRecordMessage() {
+
+    const twiml = new VoiceResponse();
+
+    twiml.say(voice.normal,
+        "Merci. Vous pouvez maintenant formuler oralement votre demande. Nous ferons ensuite passer votre message à vos contacts. Sachez également" +
+        " que pour l'instant, vos messages ne sont pas chiffrés et peuvent faire l'objet d'attaques. Nous " +
+        "travaillons actuellement sur un système de chiffrement des enregistrements pour une prochaine " +
+        "version de notre service. Jules Lecuir, développeur de l'application, se dédouanne de tout préjudice," +
+        "bien qu'il travaille du mieux qu'il peut pour vous apporter son aide! Vous pouvez maintenant parler.");
+    twiml.record({
+            action: "/ivr/reg/thankAfterMessage",
+            recordingStatusCallback: "/users/processMessage",
+            finishOnKey: '#',
+            maxLength: 180,
+        }
+    )
 
     return twiml.toString();
 }
@@ -78,4 +91,14 @@ function thankAfterMessage() {
             "vous rappelons dès que nous obtenons une réponse positive d'un d'eux."
         )
         .toString();
+}
+
+function processMessage() {
+    // TODO processMessage
+    return 123;
+}
+
+function addContact() {
+    // TODO addContact
+    return new VoiceResponse().say('le contact a pas été ajouté parce que y a pas encore de fonction pour ça.')
 }

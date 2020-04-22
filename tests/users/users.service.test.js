@@ -1,7 +1,7 @@
-const UserService = require('./../../users/user.service');
-const _db = require('./../../_helpers/db');
+const UserService = require('../../users/user_service');
+const _db = require('../../db');
 const config = require('./../../config');
-const User = require('./../../users/user.model');
+const User = require('../../users/user_model');
 require('dotenv').config();
 
 // Fake data for the db

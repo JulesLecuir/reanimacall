@@ -5,7 +5,7 @@
  */
 
 const app = require('../app');
-const _db = require('../_helpers/db');
+const _db = require('../db');
 const debug = require('debug')('reanimacall:server');
 const config = require('./../config');
 const http = require('http');

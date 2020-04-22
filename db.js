@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const LOG = require('./LOG');
+const LOG = require('./_helpers/LOG');
 
 module.exports = {
     connect: async (db_name) => {

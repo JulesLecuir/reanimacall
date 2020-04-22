@@ -1,5 +1,5 @@
 ﻿const bcrypt = require('bcryptjs');
-const User = require('./user.model');
+const User = require('./user_model');
 const check = require('./../_helpers/check');
 const LOG = require("../_helpers/LOG");
 

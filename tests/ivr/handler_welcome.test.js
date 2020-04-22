@@ -1,4 +1,4 @@
-const {welcome} = require('../../routes/ivr/handler_welcome');
+const {welcome} = require('../../routes/ivr/handler_ivr');
 
 describe('#Welcome', function () {
 
