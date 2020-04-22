@@ -17,11 +17,26 @@ updatwilio(){
 # Sleep while NGROK makes a connection
 sleep 8
 
+echo ""
+echo "--------------------------------------------"
+echo "|    STARTING MONGODB                      |"
+echo "--------------------------------------------"
+
 # Start MongoDB service
 sudo systemctl start mongod
 
+echo ""
+echo "--------------------------------------------"
+echo "|    UPDATING TWILIO API WITH NGROK URL    |"
+echo "--------------------------------------------"
+
 # Update the Twilio voice URL with the new NGROK link
 updatwilio /ivr/welcome
+
+echo ""
+echo "--------------------------------------------"
+echo "|    NGROK PID                             |"
+echo "--------------------------------------------"
 
 # Display the PID of NGROK for convenience
 ps ax | grep /home/$USER/ngrok
