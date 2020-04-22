@@ -3,16 +3,6 @@
     "dev": "reanimacall",
     "test": "reanimacall_test"
   },
-  "usersPopulation": [
-    {
-      "phone": "+33685049061",
-      "hash": "$2a$10$Ihvl.kksEYlW4fB098Fj1OQ9Hlvm4W28KsJK3yjod3gDUglvCvYSC",
-      "contacts": {
-        "phone": "+33684473313",
-        "alreadyContacted": false
-      }
-    }
-  ],
   "resetDatabase": false,
   "voice": {
     "normal": {
