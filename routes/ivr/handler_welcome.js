@@ -8,6 +8,7 @@ const welcomeNewUser = require('./new_user/handler_new_user').welcome;
 const welcomeRegisteredUser = require('./registered_user/handler_registered_user').welcome;
 // Helpers
 const Formatter = require('../../_helpers/formatter');
+const LOG = require('../../_helpers/LOG');
 const {voice} = require('../../config');
 
 // EXPORTS
@@ -23,14 +24,14 @@ async function welcome(fromNumber) {
 
     const fromNumberFormatted = Formatter.formatPhoneNumberForSpoken(fromNumber);
 
-    console.info(`INCOMING CALL FROM NUMBER ${fromNumberFormatted}`);
+    LOG.info(`Incoming call from number ${fromNumberFormatted}`);
 
     // If the person has already an account, authenticate. Otherwise, redirect to register.
     if (await UserService.isAlreadyRegistered(fromNumber)) {
-        console.info(`User already registered. Asking for password.`);
+        LOG.info(`User already registered. Asking for password.`);
         return welcomeRegisteredUser(fromNumberFormatted);
     } else {
-        console.info(`New user. Asking for creation of a new password.`);
+        LOG.info(`New user. Asking for creation of a new password.`);
         return welcomeNewUser(fromNumberFormatted);
     }
 }
@@ -42,7 +43,7 @@ async function welcome(fromNumber) {
 function redirectWelcome() {
     const twiml = new VoiceResponse();
 
-    twiml.say(voice.normal, 'Returning to the main menu');
+    twiml.say(voice.normal, 'Retour au menu principal.');
 
     twiml.redirect('/ivr/welcome');
 

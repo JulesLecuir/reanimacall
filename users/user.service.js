@@ -1,5 +1,7 @@
 ﻿const bcrypt = require('bcryptjs');
 const User = require('./user.model');
+const check = require('./../_helpers/check');
+const LOG = require("../_helpers/LOG");
 
 module.exports = {
     authenticate,
@@ -14,15 +16,22 @@ module.exports = {
     delete: _delete
 };
 
-async function authenticate({phone, pin}) {
-    if (typeof phone !== 'string' || typeof pin !== 'string')
-        throw TypeError();
+// TODO check how avoid redundancy of phone and callSid which is more secure and does not compromise performance
+async function authenticate({phone, pin, callSid}) {
+
+    check.str(phone, pin, callSid);
+
+    // Query the user if there is any
     const userQuery = await User.find({phone: phone}, {hash: true, isActive: true}).limit(1);
+
+    // Check that a user has matched and that the phone and pin code match
     if (userQuery[0] && bcrypt.compareSync(pin, userQuery[0].hash)) {
-        await User.updateOne({phone: phone}, {isWaiting: true, isWaitingSince: Date.now()});
-        return true;
+        // TODO need to check that the couple between phone and ongoingCallSid is correct before logging t in the DB.
+        // Update the call ID and the status of the customer
+        await User.updateOne({phone: phone}, {status: 'asking', callSid: callSid});
+        LOG.info('User authenticated.')
     } else {
-        return false;
+        throw Error('User not authenticated. Either the user was not found, or the pin code didn\'t match.');
     }
 }
 

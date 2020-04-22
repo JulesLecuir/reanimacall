@@ -2,6 +2,8 @@ const VoiceResponse = require('twilio').twiml.VoiceResponse;
 const {voice, messages} = require('../../../config');
 const UserService = require("../../../users/user.service");
 const {spaceBetweenEachLetter} = require("../../../_helpers/formatter");
+const LOG = require('./../../../_helpers/LOG');
+
 
 module.exports = {
     welcome,
@@ -35,20 +37,19 @@ function welcome(fromNumberFormatted) {
 async function createAccount(fromNumber, digits) {
 
     const twiml = new VoiceResponse();
-    console.log(spaceBetweenEachLetter(digits));
     // Create a user. if the user is already created, send an error.
     await Promise.all([
         UserService
             .create({phone: fromNumber, pin: digits})
             .then(() => {
-                    console.log("Compte créé");
-                    twiml.say(voice.normal,
-                        `Votre compte a été créé avec le pine, ${spaceBetweenEachLetter(digits)}. Merci et au revoir.`);
+                LOG.success("Account created");
+                twiml.say(voice.normal,
+                    `Votre compte a été créé avec le pine, ${spaceBetweenEachLetter(digits)}. Merci et au revoir.`);
                 }
             )
             .catch((err) => {
-                    console.error("ERROR: " + err);
-                    twiml.say(voice.normal, messages.errorOccurred);
+                LOG.error(err, "Account could not be created");
+                twiml.say(voice.normal, messages.errorOccurred);
                 }
             )
     ]);
