@@ -5,7 +5,7 @@ const router = express.Router();
 const RegisteredUserRouter = require('./registered_user/router_registered_user');
 const NewUserRouter = require('./new_user/router_new_user');
 
-const {welcome, redirectWelcome, mainMenu, offerMainMenu} = require('./handler_ivr');
+const {welcome, redirectWelcome, mainMenu, offerMainMenu, noPinEntered} = require('./handler_ivr');
 
 /*
  * Redirection to subrouters
@@ -28,6 +28,10 @@ router.post('/offerMainMenu', (req, res) => {
 
 router.post('/mainMenu', (req, res) => {
   res.send(mainMenu(req.body.Digits));
+});
+
+router.post('/noPinEntered', (req, res) => {
+  res.send(noPinEntered());
 });
 
 module.exports = router;

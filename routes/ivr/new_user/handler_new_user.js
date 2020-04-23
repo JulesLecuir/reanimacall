@@ -17,19 +17,18 @@ function welcome(fromNumberFormatted) {
     twiml
         .gather({
             action: '/ivr/new/createAccount',
-            finishOnKey: '#',
-            method: 'POST',
+            timeout: 10
         })
-        .say({
-                ...voice.normal,
-                loop: 3
-            },
+        .say(voice.normal,
             'Bonjour. ' +
             'Vous nous appelez depuis le numéro ' + fromNumberFormatted + '.' +
             'Si vous souhaitez créer un compte, veillez choisir un nouveau code PINE. Ce code PINE vous servira ' +
             'pour vous authentifier ultérieurement lorsque vous appellerez avec ce numéro. Vous pouvez maintenant ' +
             'taper votre code PINE, puis appuyer sur dièse pour valider votre inscription.'
         );
+
+    // If the person doesn't enter anything, redirect
+    twiml.redirect('/ivr/noPinEntered');
 
     return twiml.toString();
 }

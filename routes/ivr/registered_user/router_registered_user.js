@@ -13,7 +13,7 @@ router.post('/thankAfterMessage', async (req, res) => {
 
 router.post('/processMessage', async function (req, res) {
     // TODO process the message properly
-    res.send(processMessage(req));
+    res.send(await processMessage(req));
 });
 
 router.post('/addContact', async function (req, res) {

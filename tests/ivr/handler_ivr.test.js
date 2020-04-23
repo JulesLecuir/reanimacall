@@ -23,7 +23,6 @@ describe("#Welcome", function () {
 
     describe("If user already registered", function () {
 
-        // TODO throws a timeout error, Jest is just stuck waiting and fails after timeout.
         it('should welcome the user and ask for a PIN', async function () {
 
             const twiml = await welcome(userRegistered.phone);

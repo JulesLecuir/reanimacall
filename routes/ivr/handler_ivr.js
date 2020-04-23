@@ -11,7 +11,8 @@ module.exports = {
     welcome,
     redirectWelcome,
     offerMainMenu,
-    mainMenu
+    mainMenu,
+    noPinEntered
 };
 
 /**
@@ -100,4 +101,13 @@ function mainMenu(digit) {
     }
 
     return menu[digit]();
+}
+
+function noPinEntered() {
+
+    const twiml = new VoiceResponse();
+    twiml.say(voice.normal, "Nous n'avons pas reçu votre PINE. Au revoir!");
+    twiml.hangup();
+
+    return twiml.toString();
 }

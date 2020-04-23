@@ -20,17 +20,17 @@ function welcome(numberFormatted) {
     twiml
         .gather({
             action: '/ivr/reg/authPin',
-            finishOnKey: '*#',
-            method: 'POST',
+            timeout: 10
         })
         .say(voice.normal,
             'Bonjour. ' +
-            // TODO remettre 'Vous nous appelez depuis le numéro ' + numberFormatted + '.' +
+            // TODO debug
+            // 'Vous nous appelez depuis le numéro ' + numberFormatted + '.' +
             ' Entrez votre code PINE, puis tapez dièse.'
         );
-    twiml.pause({length: 10});
 
-    // TODO gérer le cas où la personne n'entre rien du tout
+    // If the person doesn't enter anything, redirect
+    twiml.redirect('/ivr/noPinEntered');
 
     return twiml.toString();
 }
@@ -44,7 +44,6 @@ async function authPin(phone, pin, callSid) {
             .authenticate({phone, pin, callSid})
             .then(() => {
                     LOG.success("Authentification réussie");
-                    // TODO invoke a function if the user presses a key that memorizes that the user doesn't want to hear the messages before leaving a message
                     twiml.say(voice.normal, 'Merci.');
                     twiml.redirect('/ivr/offerMainMenu');
                 }
@@ -64,6 +63,7 @@ function offerRecordMessage() {
 
     const twiml = new VoiceResponse();
 
+    // TODO invoke a function if the user presses a key that memorizes that the user doesn't want to hear the messages before leaving a message
     twiml.say(voice.normal,
         "Merci. Vous pouvez maintenant formuler oralement votre demande. Nous ferons ensuite passer votre message à vos contacts. Sachez également" +
         " que pour l'instant, vos messages ne sont pas chiffrés et peuvent faire l'objet d'attaques. Nous " +
@@ -73,7 +73,6 @@ function offerRecordMessage() {
     twiml.record({
             action: "/ivr/reg/thankAfterMessage",
             recordingStatusCallback: "/ivr/reg/processMessage",
-            finishOnKey: '#',
             maxLength: 180,
         }
     )
@@ -93,8 +92,8 @@ function thankAfterMessage() {
         .toString();
 }
 
-function processMessage(messageUrl, callSid, recordingSid) {
-    // TODO process Message
+async function processMessage() {
+    // TODO process Message (messageUrl, callSid, recordingSid)
     return 123;
 }
 
