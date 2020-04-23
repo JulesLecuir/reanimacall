@@ -1,6 +1,6 @@
 ﻿{
   "db": {
-    "dev": "reanimacall"
+    "dev": "reanimacall_dev"
   },
   "resetDatabase": false,
   "voice": {
