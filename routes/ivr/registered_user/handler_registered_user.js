@@ -72,7 +72,7 @@ function offerRecordMessage() {
         "bien qu'il travaille du mieux qu'il peut pour vous apporter son aide! Vous pouvez maintenant parler.");
     twiml.record({
             action: "/ivr/reg/thankAfterMessage",
-            recordingStatusCallback: "/users/processMessage",
+            recordingStatusCallback: "/ivr/reg/processMessage",
             finishOnKey: '#',
             maxLength: 180,
         }
@@ -93,12 +93,13 @@ function thankAfterMessage() {
         .toString();
 }
 
-function processMessage() {
-    // TODO processMessage
+function processMessage(messageUrl, callSid, recordingSid) {
+    // TODO process Message
     return 123;
 }
 
 function addContact() {
-    // TODO addContact
+
+    //TODO add Contact
     return new VoiceResponse().say('le contact a pas été ajouté parce que y a pas encore de fonction pour ça.')
 }

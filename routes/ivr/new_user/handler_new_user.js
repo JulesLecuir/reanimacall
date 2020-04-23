@@ -13,7 +13,7 @@ module.exports = {
 function welcome(fromNumberFormatted) {
 
     const twiml = new VoiceResponse();
-    // TODO add directly a tracking of the callSid here so we can track unique call numbers from the beginning.
+
     twiml
         .gather({
             action: '/ivr/new/createAccount',

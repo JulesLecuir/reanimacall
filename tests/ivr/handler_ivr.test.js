@@ -1,14 +1,21 @@
 const {welcome} = require('../../routes/ivr/handler_ivr');
 const UserService = require('../../users/user_service');
 require('dotenv').config();
+const User = require('../../users/user_model');
 const mock = require('../mock');
 
+const userRegistered = mock.userRegistered;
+
+beforeAll(async function () {
+    // Initialize the database in test mode
+    await mock.initDatabase("users_service_test");
+});
+
 beforeEach(async function () {
-
-    await mock.initDatabase("handler_ivr_test");
-
+    // Clean database
+    await User.deleteMany({});
     // Populate the db
-    await UserService.create(mock.userRegistered);
+    await UserService.create(userRegistered);
 });
 
 
@@ -19,7 +26,7 @@ describe("#Welcome", function () {
         // TODO throws a timeout error, Jest is just stuck waiting and fails after timeout.
         it('should welcome the user and ask for a PIN', async function () {
 
-            const twiml = await welcome(mock.userRegistered.phone);
+            const twiml = await welcome(userRegistered.phone);
 
             expect(twiml).toContain('Bonjour');
             expect(twiml).toContain('Gather');

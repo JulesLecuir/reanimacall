@@ -1,21 +1,33 @@
-const bcrypt = require('bcryptjs');
+﻿const bcrypt = require('bcryptjs');
 const User = require('./user_model');
 const check = require('./../_helpers/check');
 const LOG = require("../_helpers/LOG");
 
 module.exports = {
     authenticate,
-    getAll,
-    getById,
-    getByPhoneNumber,
-    addContacts,
-    getContacts,
-    isAlreadyRegistered,
     create,
     update,
+
+    isAlreadyRegistered,
+    getById,
+    getByPhoneNumber,
+    getContacts,
+
+    getAll,
+
+    addContacts,
+
     delete: _delete
 };
 
+
+/**
+ * Authenticate the user
+ * @param phone
+ * @param pin
+ * @param callSid
+ * @returns {Promise<boolean>} true if authentication successful or throws an error
+ */
 // TODO check how avoid redundancy of phone and callSid which is more secure and does not compromise performance
 async function authenticate({phone, pin, callSid}) {
 
@@ -36,33 +48,12 @@ async function authenticate({phone, pin, callSid}) {
     }
 }
 
-async function addContacts(phone, contactsArray) {
-    const res = await User.updateOne({phone: phone}, {contacts: contactsArray});
-    return res.nModified;
-}
 
-// TODO add hash for validation
-async function getContacts(phone) {
-    const user = (await getByPhoneNumber(phone));
-    return user.contacts;
-}
-
-async function getAll() {
-    return await User.find().select('-hash');
-}
-
-async function getById(id) {
-    return await User.findById(id).select('-hash');
-}
-
-async function getByPhoneNumber(number) {
-    return (await User.find({phone: number}, {hash: false}).limit(1))[0];
-}
-
-async function isAlreadyRegistered(number) {
-    return await User.exists({phone: number});
-}
-
+/**
+ * Create a new user
+ * @param userParam must include phone, pin and callSid. Can also include an array of contacts. Everything must be strings.
+ * @returns {Promise<void>}
+ */
 async function create(userParam) {
 
     // Check data
@@ -89,6 +80,10 @@ async function create(userParam) {
 }
 
 async function update(phone, userParam) {
+
+    check.str(phone);
+    // TODO find a way to check userParam? or maybe MongoDb does it already?
+
     const user = await getByPhoneNumber(phone);
 
     // validate
@@ -106,6 +101,38 @@ async function update(phone, userParam) {
     Object.assign(user, userParam);
 
     await user.save();
+}
+
+
+async function isAlreadyRegistered(number) {
+    return await User.exists({phone: number});
+}
+
+
+async function getById(id) {
+    return await User.findById(id).select('-hash');
+}
+
+async function getByPhoneNumber(number) {
+    return (await User.find({phone: number}, {hash: false}).limit(1))[0];
+}
+
+// TODO add hash for validation
+async function getContacts(phone, currentCallSid) {
+    const user = (await getByPhoneNumber(phone));
+    if (user.callSid === currentCallSid)
+        return user.contacts;
+    else
+        throw Error("CallSid didn't match");
+}
+
+async function getAll() {
+    return await User.find().select('-hash');
+}
+
+async function addContacts(phone, ...contacts) {
+    const res = await User.updateOne({phone: phone}, {contacts: [...contacts]});
+    return res.nModified;
 }
 
 async function _delete(id) {

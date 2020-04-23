@@ -1,4 +1,3 @@
-const User = require('../users/user_model');
 const _db = require('../db');
 
 const userNew = {
@@ -19,9 +18,6 @@ const userRegistered = {
 async function initDatabase(databaseName) {
     // Initialize the database in test db
     await _db.connect(databaseName);
-
-    // Erase the db
-    await User.deleteMany({});
 }
 
 module.exports = {
