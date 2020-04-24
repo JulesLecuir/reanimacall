@@ -2,6 +2,7 @@ const {welcome} = require('../../routes/ivr/handler_ivr');
 const UserService = require('../../users/user_service');
 require('dotenv').config();
 const User = require('../../users/user_model');
+const {countWord} = require("../_helper");
 const {userRegistered, initDatabase} = require('../mock');
 
 beforeAll(async function () {
@@ -25,6 +26,7 @@ describe("#Welcome", function () {
 
             const twiml = await welcome(userRegistered.phone);
 
+            expect(countWord("Say", twiml)).toEqual(2);
             expect(twiml).toContain('Bonjour');
             expect(twiml).toContain('Gather');
             expect(twiml).toContain('Say');
