@@ -2,7 +2,11 @@ const VoiceResponse = require('twilio').twiml.VoiceResponse;
 const {voice} = require('../../../config');
 const UserService = require('../../../users/user_service');
 const LOG = require('./../../../_helpers/LOG');
+const Mutex = require('async-mutex').Mutex;
+const Semaphore = require('async-mutex').Semaphore;
 
+const mutexesSema = new Semaphore(1);
+mutexes = {};
 
 module.exports = {
     welcome,
@@ -12,6 +16,7 @@ module.exports = {
     processMessage,
     addContact,
 };
+
 
 function welcome(numberFormatted) {
 
@@ -65,11 +70,14 @@ function offerRecordMessage() {
 
     // TODO invoke a function if the user presses a key that memorizes that the user doesn't want to hear the messages before leaving a message
     twiml.say(voice.normal,
-        "Merci. Vous pouvez maintenant formuler oralement votre demande. Nous ferons ensuite passer votre message à vos contacts. Sachez également" +
-        " que pour l'instant, vos messages ne sont pas chiffrés et peuvent faire l'objet d'attaques. Nous " +
-        "travaillons actuellement sur un système de chiffrement des enregistrements pour une prochaine " +
-        "version de notre service. Jules Lecuir, développeur de l'application, se dédouanne de tout préjudice," +
-        "bien qu'il travaille du mieux qu'il peut pour vous apporter son aide! Vous pouvez maintenant parler.");
+        "Merci. Vous pouvez maintenant formuler oralement votre demande. "
+        // TODO debug
+        // + "Nous ferons ensuite passer votre message à vos contacts. Sachez également" +
+        // " que pour l'instant, vos messages ne sont pas chiffrés et peuvent faire l'objet d'attaques. Nous " +
+        // "travaillons actuellement sur un système de chiffrement des enregistrements pour une prochaine " +
+        // "version de notre service. Jules Lecuir, développeur de l'application, se dédouanne de tout préjudice," +
+        // "bien qu'il travaille du mieux qu'il peut pour vous apporter son aide! Vous pouvez maintenant parler."
+    );
     twiml.record({
             action: "/ivr/reg/thankAfterMessage",
             recordingStatusCallback: "/ivr/reg/processMessage",
@@ -80,25 +88,56 @@ function offerRecordMessage() {
     return twiml.toString();
 }
 
-function thankAfterMessage() {
+async function thankAfterMessage(callSid, recordingUrl) {
 
-    // TODO replay the message that the person just recorded. If the person hans up, validates, if presses any key, can record it again.
-    return new VoiceResponse()
-        .say(
-            voice.normal,
-            "Merci pour votre message. Nous appelons vos contacts et nous " +
-            "vous rappelons dès que nous obtenons une réponse positive d'un d'eux."
-        )
-        .toString();
+    // Create a mutex so it can be a sync barrier before the recording message is processed.
+    let [_, releaseSema] = await mutexesSema.acquire();
+    try {
+        (mutexes[callSid] = {}).mutex = new Mutex();
+        mutexes[callSid].release = await mutexes[callSid].mutex.acquire();
+    } finally {
+        releaseSema();
+    }
+
+    // Then wait as long as the mutex is not released
+    await mutexes[callSid].mutex.runExclusive(() => {
+    });
+
+    // And finally delete the mutex entry for this callSid
+    [_, releaseSema] = await mutexesSema.acquire();
+    try {
+        delete mutexes[callSid];
+    } finally {
+        releaseSema();
+    }
+
+    const twiml = new VoiceResponse();
+    twiml.say(voice.normal,
+        "Merci pour votre message. Nous appelons vos contacts et nous " +
+        "vous rappelons dès que nous obtenons une réponse positive d'un d'eux." +
+        "Voici votre enregistrement. Il sera diffusé."
+    );
+    twiml.play(recordingUrl)
+
+    return twiml.toString();
 }
 
-async function processMessage() {
-    // TODO process Message (messageUrl, callSid, recordingSid)
-    return 123;
+async function processMessage(messageUrl, callSid) {
+
+    // release the syc barrier so that the recording can be played on the phone to te user
+    const [_, releaseSema] = await mutexesSema.acquire();
+    try {
+        mutexes[callSid].release();
+    } finally {
+        releaseSema();
+    }
+
+    // TODO launch procedure to call all the other contacts + save the recording url in the DB.
+
+    return 200;
 }
 
 function addContact() {
-
     //TODO add Contact
     return new VoiceResponse().say('le contact a pas été ajouté parce que y a pas encore de fonction pour ça.')
 }

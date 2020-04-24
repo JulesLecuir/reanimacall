@@ -8,12 +8,13 @@ router.post('/authPin', async (req, res) => {
 });
 
 router.post('/thankAfterMessage', async (req, res) => {
-    res.send(thankAfterMessage());
+     res.send(await thankAfterMessage(req.body.CallSid, req.body.RecordingUrl));
 });
 
-router.post('/processMessage', async function (req, res) {
+router.post('/processMessage', function (req, res) {
     // TODO process the message properly
-    res.send(await processMessage(req));
+    res.send(processMessage(req.body.RecordingUrl, req.body.CallSid))
+
 });
 
 router.post('/addContact', async function (req, res) {
