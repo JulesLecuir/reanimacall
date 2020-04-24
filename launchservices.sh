@@ -13,18 +13,24 @@ updatwilio(){
 }
 
 # Start NGROK in background
-~/ngrok http 3000 &
+$NGROK_EXECUTABLE http 3000 &
 
-# Sleep while NGROK makes a connection
-sleep 8
+sleep 4
 
 echo ""
 echo "--------------------------------------------"
 echo "|    STARTING MONGODB                      |"
 echo "--------------------------------------------"
 
+# Sleep while NGROK initialized a connection
+sleep 1
+echo "Please only type your password when ngrok has initialized the webhook URLs!"
+
 # Start MongoDB service
 sudo systemctl start mongod
+
+# start Mongo Compass
+mongodb-compass&
 
 echo ""
 echo "--------------------------------------------"
@@ -40,5 +46,5 @@ echo "|    NGROK PID                             |"
 echo "--------------------------------------------"
 
 # Display the PID of NGROK for convenience
-ps ax | grep /home/$USER/ngrok
+ps ax | grep $NGROK_EXECUTABLE
 
