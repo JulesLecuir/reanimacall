@@ -11,8 +11,15 @@ const userNew = {
 const userRegistered = {
     phone: '+33611111111',
     pin: '123',
-    contacts: ['+33655555555', '+33666666666', userNew.phone],
+    contacts: ['+33655555555', '+33666666666'],
     callSid: 'CAyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy'
+};
+
+const userRegistered2 = {
+    phone: '+33622222222',
+    pin: '123',
+    contacts: ['+33655555555', '+33666666666'],
+    callSid: 'CAzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz'
 };
 
 async function initDatabase(databaseName) {
@@ -23,5 +30,6 @@ async function initDatabase(databaseName) {
 module.exports = {
     userNew,
     userRegistered,
+    userRegistered2,
     initDatabase
 }
