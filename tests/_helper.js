@@ -1,4 +1,3 @@
-// TODO try if a test db can work this way
 module.exports = {
     countWord
 };

@@ -12,7 +12,6 @@ router.post('/thankAfterMessage', async (req, res) => {
 });
 
 router.post('/processMessage', function (req, res) {
-    // TODO process the message properly
     res.send(processMessage(req.body.RecordingUrl, req.body.CallSid))
 
 });
