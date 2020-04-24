@@ -1,14 +1,13 @@
 const UserService = require('../../users/user_service');
 const User = require('../../users/user_model');
 require('dotenv').config();
-const mock = require('../mock');
+const bcrypt = require('bcryptjs');
+const {userNew, userRegistered, userRegistered2, initDatabase} = require('../mock');
 
-const userNew = mock.userNew;
-const userRegistered = mock.userRegistered;
 
 beforeAll(async function () {
     // Initialize the database in test mode
-    await mock.initDatabase("users_service_test");
+    await initDatabase("users_service_test");
 });
 
 beforeEach(async function () {

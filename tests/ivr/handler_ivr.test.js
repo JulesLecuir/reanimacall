@@ -2,13 +2,11 @@ const {welcome} = require('../../routes/ivr/handler_ivr');
 const UserService = require('../../users/user_service');
 require('dotenv').config();
 const User = require('../../users/user_model');
-const mock = require('../mock');
-
-const userRegistered = mock.userRegistered;
+const {userRegistered, initDatabase} = require('../mock');
 
 beforeAll(async function () {
     // Initialize the database in test mode
-    await mock.initDatabase("users_service_test");
+    await initDatabase("users_service_test");
 });
 
 beforeEach(async function () {
