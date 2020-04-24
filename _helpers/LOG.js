@@ -6,7 +6,11 @@ module.exports = {
     log: (str) => console.log(str),
     debug: (str) => console.debug(`${new Date().toLocaleTimeString()} - DEBUG: ${str}`),
     warn: (str) => console.warn(`${new Date().toLocaleTimeString()} - WARN: ${str}`.yellow),
-    error: (err, str) => console.error((str ? `--------------\n${new Date().toLocaleTimeString()} - ERROR: ${str}\n` : `--------------\n${new Date().toLocaleTimeString()} - `).red + `${err.stack}\n--------------`.red)
+    error: (err, str) => {
+        console.error((str ? `--------------\n${new Date().toLocaleTimeString()} - ERROR: ${str}\n` : `--------------\n${new Date().toLocaleTimeString()} - `).red + `${err.stack}\n--------------`.red)
+        return err;
+    },
+
 };
 
 /* FOR TEST PURPOSE :
