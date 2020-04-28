@@ -29,9 +29,6 @@ echo "Please only type your password when ngrok has initialized the webhook URLs
 # Start MongoDB service
 sudo systemctl start mongod
 
-# start Mongo Compass
-mongodb-compass&
-
 echo ""
 echo "--------------------------------------------"
 echo "|    UPDATING TWILIO API WITH NGROK URL    |"
