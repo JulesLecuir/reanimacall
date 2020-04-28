@@ -10,7 +10,5 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.set('toJSON', {virtuals: true});
-// TODO force use of our own indexes based on phone and callSid
 const User = mongoose.model('User', userSchema);
-
 module.exports = User;

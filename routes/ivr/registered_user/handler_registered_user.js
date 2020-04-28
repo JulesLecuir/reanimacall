@@ -2,6 +2,7 @@ const VoiceResponse = require('twilio').twiml.VoiceResponse;
 const {voice} = require('../../../config');
 const UserService = require('../../../users/user_service');
 const LOG = require('./../../../_helpers/LOG');
+const Formatter = require("../../../_helpers/formatter");
 const Mutex = require('async-mutex').Mutex;
 const Semaphore = require('async-mutex').Semaphore;
 
@@ -46,7 +47,7 @@ async function authPin(phone, pin, callSid) {
 
     await Promise.all([
         UserService
-            .authenticate({phone, pin, callSid})
+            .authenticate(phone, pin, callSid)
             .then(() => {
                     LOG.success("Authentification réussie");
                     twiml.say(voice.normal, 'Merci.');
@@ -132,12 +133,22 @@ async function processMessage(messageUrl, callSid) {
         releaseSema();
     }
 
-    // TODO launch procedure to call all the other contacts + save the recording url in the DB.
+    await launchContactingProcedure(messageUrl, callSid);
 
     return 200;
 }
 
-function addContact() {
-    //TODO add Contact
-    return new VoiceResponse().say('le contact a pas été ajouté parce que y a pas encore de fonction pour ça.')
+async function addContact(callSid, phone, contactNumber) {
+    await UserService.addOneContact(phone, contactNumber);
+    LOG.success(`Contact ${contactNumber} was successfully added to ${phone} account`);
+    const twiml = new VoiceResponse();
+    twiml.say(voice.normal,
+        `Le contact ${Formatter.formatPhoneNumberForSpoken(contactNumber)} 
+        a été ajouté au compte ${Formatter.formatPhoneNumberForSpoken(phone)}.`);
+    twiml.redirect('/ivr/mainMenu');
+    return twiml.toString();
+}
+
+async function launchContactingProcedure(messageUrl, callSid) {
+    //TODO launchContactingProcedure
 }

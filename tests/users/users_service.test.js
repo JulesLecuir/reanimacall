@@ -112,32 +112,28 @@ describe('#authenticate', function () {
 
     it('should throw a TypeError when the input is not of correct type or inexistant', async function () {
         // phone, pin and callSid are compulsory for this function.
-        await expect(UserService.authenticate({phone: userRegistered.phone, pin: userRegistered.pin}))
+        await expect(UserService.authenticate(userRegistered.phone, userRegistered.pin))
             .rejects.toThrow(TypeError);
-        await expect(UserService.authenticate({pin: userRegistered.pin, callSid: userRegistered.callSid}))
+        await expect(UserService.authenticate(userRegistered.pin, userRegistered.callSid))
             .rejects.toThrow(TypeError);
-        await expect(UserService.authenticate({
-            phone: userRegistered.phone,
-            pin: userRegistered.pin,
-            callSid: 4567
-        }))
+        await expect(UserService.authenticate(userRegistered.phone, userRegistered.pin, 4567))
             .rejects.toThrow(TypeError);
     });
 
     it('should throw an error when the user is not found', async function () {
-        await expect(UserService.authenticate({
-            phone: userNew.phone,
-            pin: userNew.pin,
-            callSid: userNew.callSid
-        })).rejects.toThrow(Error);
+        await expect(UserService.authenticate(
+            userNew.phone,
+            userNew.pin,
+            userNew.callSid
+        )).rejects.toThrow(Error);
     });
 
     it("should return truthy if phone and pin correct", async function () {
-        expect(await UserService.authenticate({
-            phone: userRegistered.phone,
-            pin: userRegistered.pin,
-            callSid: userRegistered.callSid
-        })).toBeTruthy();
+        expect(await UserService.authenticate(
+            userRegistered.phone,
+            userRegistered.pin,
+            userRegistered.callSid
+        )).toBeTruthy();
     });
 
     describe("if pin is correct", function () {
@@ -149,7 +145,7 @@ describe('#authenticate', function () {
         };
 
         beforeEach(async function () {
-            await UserService.authenticate(userData);
+            await UserService.authenticate(userData.phone, userData.pin, userData.callSid);
         })
 
         it("should change the user status to 'asking'", async function () {

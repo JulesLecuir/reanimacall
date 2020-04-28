@@ -17,7 +17,7 @@ module.exports = {
     getAllLean,
 
     getContacts,
-    addContacts,
+    addOneContact,
 
     delete: _delete
 };
@@ -30,12 +30,12 @@ module.exports = {
  * @param callSid
  * @returns {Promise<boolean>} true if authentication successful or throws an error
  */
-async function authenticate({phone, pin, callSid}) {
+async function authenticate(phone, pin, callSid) {
 
     check.str(phone, pin, callSid);
 
     // Query the user if there is any
-    const userQuery = await User.find({phone: phone}, {hash: true, isActive: true}).limit(1);
+    const userQuery = await User.find({phone: phone}, {hash: true}).limit(1);
 
     // Check that a user has matched and that the phone and pin code match
     if (userQuery[0] && bcrypt.compareSync(pin, userQuery[0].hash)) {
@@ -86,7 +86,6 @@ async function update(conditions, userParam) {
 
     checkUserParam(userParam);
 
-
     // get the user but remove the pin of the conditions in case it is given because there is no pin in the db
     const conditionsWithoutPin = {...conditions};
     delete conditionsWithoutPin.pin;
@@ -117,8 +116,8 @@ async function update(conditions, userParam) {
     LOG.info(`User ${userParam.phone} updated.`);
 }
 
-async function isAlreadyRegistered(number) {
-    return await User.exists({phone: number});
+async function isAlreadyRegistered(phone) {
+    return await User.exists({phone: phone});
 }
 
 // TODO test getOne and getOneLean!
@@ -131,12 +130,9 @@ async function getOneLean(conditions, selection = {hash: false}) {
 }
 
 // TODO add hash for validation
-async function getContacts(phone, currentCallSid) {
-    const user = (await getOneLean({phone}, {contacts: true}));
-    if (user.callSid === currentCallSid)
-        return user.contacts;
-    else
-        throw Error("CallSid didn't match");
+async function getContacts(phone) {
+    const user = await getOneLean({phone: phone}, {contacts: true});
+    return user.contacts;
 }
 
 async function getAll() {
@@ -147,9 +143,8 @@ async function getAllLean() {
     return await User.find().select('-hash').lean();
 }
 
-async function addContacts(phone, ...contacts) {
-    const res = await User.updateOne({phone: phone}, {contacts: [...contacts]});
-    return res.nModified;
+async function addOneContact(phone, contact) {
+    await User.updateOne({phone: phone}, {$push: {contacts: contact}});
 }
 
 async function _delete(id) {
@@ -157,7 +152,6 @@ async function _delete(id) {
 }
 
 function checkUserParam(userParam) {
-
     check.str(userParam.phone ? userParam.phone : "a",
         userParam.pin ? userParam.pin : "a",
         userParam.callSid ? userParam.callSid : "a",

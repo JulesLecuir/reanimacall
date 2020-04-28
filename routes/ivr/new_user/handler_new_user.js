@@ -62,4 +62,3 @@ async function createAccount(fromNumber, digits, callSid) {
 }
 
 
-//    await UserService.addContacts(fromNumber, ["+336844473313", "+33756617277", "+33684433473313", "+337566174277"]);
