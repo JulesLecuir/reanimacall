@@ -51,9 +51,23 @@ phone number ID, so that the `launchsservices.sh` script can work properly.
 Create a doc with those following variables, as below. The values correspond to my own setup, but you can adapt:
 
 ```$xslt
+# Database setup
 DB_HOST=mongodb://localhost:27017/
 PORT=3000
+
+# Phone number ID used to receive incoming calls
 PHONE_NUMBER_ID=PNxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+# Absolute path where the ngrok exectuable is located
+NGROK_EXECUTABLE=/home/$USER/ngrok
+
+# Twilio account SID and authorization token used to make outbound calls
+TWILIO_ACCOUNT_SID=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+TWILIO_AUTH_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+                  
+DB_HOST=mongodb://localhost:27017/
+PORT=3000
+
 ```
 
 #### Change the language options and database names in `config.json`
