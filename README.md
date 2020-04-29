@@ -55,7 +55,9 @@ Create a doc with those following variables, as below. The values correspond to 
 DB_HOST=mongodb://localhost:27017/
 PORT=3000
 
-# Phone number ID used to receive incoming calls
+
+# Phone number and phone number ID
+PHONE_NUMBER=+xxxxxxxxxxx
 PHONE_NUMBER_ID=PNxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 # Absolute path where the ngrok exectuable is located
