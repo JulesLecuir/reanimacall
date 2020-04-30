@@ -17,7 +17,7 @@ router.post('/processMessage', function (req, res) {
 });
 
 router.post('/addContact', async function (req, res) {
-    res.send(await addContact(req.body.CallSid, req.body.From, req.body.Digits));
+    res.send(await addContact(req.body.From, req.body.Digits));
 });
 
 module.exports = router;

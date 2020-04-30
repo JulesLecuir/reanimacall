@@ -1,4 +1,5 @@
 const VoiceResponse = require('twilio').twiml.VoiceResponse;
+const client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 const {voice} = require('../../../config');
 const UserService = require('../../../users/user_service');
 const LOG = require('./../../../_helpers/LOG');
@@ -15,7 +16,7 @@ module.exports = {
     thankAfterMessage,
     offerRecordMessage,
     processMessage,
-    addContact,
+    addContact
 };
 
 
@@ -118,7 +119,7 @@ async function thankAfterMessage(callSid, recordingUrl) {
         "vous rappelons dès que nous obtenons une réponse positive d'un d'eux." +
         "Voici votre enregistrement. Il sera diffusé."
     );
-    twiml.play(recordingUrl)
+    twiml.play(recordingUrl);
 
     return twiml.toString();
 }
@@ -138,7 +139,7 @@ async function processMessage(messageUrl, callSid) {
     return 200;
 }
 
-async function addContact(callSid, phone, contactNumber) {
+async function addContact(phone, contactNumber) {
     await UserService.addOneContact(phone, contactNumber);
     LOG.success(`Contact ${contactNumber} was successfully added to ${phone} account`);
     const twiml = new VoiceResponse();
