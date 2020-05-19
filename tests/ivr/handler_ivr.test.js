@@ -7,7 +7,7 @@ const {userRegistered, initDatabase} = require('../mock');
 
 beforeAll(async function () {
     // Initialize the database in test mode
-    await initDatabase("users_service_test");
+    await initDatabase("handler_ivr_test");
 });
 
 beforeEach(async function () {

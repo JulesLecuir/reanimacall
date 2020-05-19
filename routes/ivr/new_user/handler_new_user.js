@@ -21,7 +21,7 @@ function welcome(fromNumberFormatted) {
         })
         .say(voice.normal,
             'Bonjour. ' +
-            'Vous nous appelez depuis le numéro ' + fromNumberFormatted + '.' +
+            'Vous nous appelez depuis le numéro ' + fromNumberFormatted + '. ' +
             'Si vous souhaitez créer un compte, veillez choisir un nouveau code PINE. Ce code PINE vous servira ' +
             'pour vous authentifier ultérieurement lorsque vous appellerez avec ce numéro. Vous pouvez maintenant ' +
             'taper votre code PINE, puis appuyer sur dièse pour valider votre inscription.'
@@ -45,7 +45,7 @@ async function createAccount(fromNumber, digits, callSid) {
                     twiml.say(
                         voice.normal,
                         `Votre compte a été créé avec le pine, ${spaceBetweenEachLetter(digits)}.
-                     Vous allez bientôt pouvoir ajouter des numéros à contacter, ou faire passer une requête. Vous allez être redirigé pour vous authetifier avec le PINE qe vous venez de saisir.`
+                      Vous allez bientôt pouvoir ajouter des numéros à contacter, ou faire passer une requête. Vous allez être redirigé pour vous authetifier avec le PINE qe vous venez de saisir.`
                     );
                     LOG.info('Redirecting to the addContactMenu.');
                     twiml.redirect('/ivr/welcome');

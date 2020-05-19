@@ -2,13 +2,13 @@
   "db": {
     "dev": "reanimacall_dev"
   },
-  "resetDatabase": false,
+  "phoneCountryCode": "+33",
   "voice": {
     "normal": {
       "voice": "alice",
       "language": "fr-FR"
     },
-    "loop": {
+    "normalLoop": {
       "voice": "alice",
       "language": "fr-FR",
       "loop": 3

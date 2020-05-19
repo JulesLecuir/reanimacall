@@ -91,7 +91,7 @@ First of all, you need to execute the `launchservices.sh` script. All it does is
 
 The terminal session that you used to launch the `launchservices.sh` script will stay frozen (probably because of ngrok running). I recommend keeping this session open and using another session to run your other commands.
 
-Once it's done, all you have to do is launch the app. Please see the `package.json` file to know which command to type.
+Once it's done, all you have to do is launch the tests to see if everything is okay with `npm test`, and then you're good to go! Please see the `package.json` file to know which command to type.
 
 ## Final word
 I hope you'll enjoy working on the app! Leave me a comment if you face any issue.

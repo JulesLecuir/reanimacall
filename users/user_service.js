@@ -16,7 +16,6 @@ module.exports = {
     getAll,
     getAllLean,
 
-    getContacts,
     addOneContact,
 
     delete: _delete
@@ -120,19 +119,13 @@ async function isAlreadyRegistered(phone) {
     return await User.exists({phone: phone});
 }
 
-// TODO test getOne and getOneLean!
+// TODO test getOne and getOneLean
 async function getOne(conditions, selection = {hash: false}) {
     return (await User.find(conditions).select(selection).limit(1))[0];
 }
 
 async function getOneLean(conditions, selection = {hash: false}) {
     return (await User.find(conditions).select(selection).lean().limit(1))[0];
-}
-
-// TODO add hash for validation
-async function getContacts(phone) {
-    const user = await getOneLean({phone: phone}, {contacts: true});
-    return user.contacts;
 }
 
 async function getAll() {

@@ -5,7 +5,7 @@ const router = express.Router();
 const RegisteredUserRouter = require('./registered_user/router_registered_user');
 const NewUserRouter = require('./new_user/router_new_user');
 
-const {welcome, redirectWelcome, mainMenu, offerMainMenu, noPinEntered} = require('./handler_ivr');
+const {welcome, redirectWelcome, mainMenu, offerMainMenu, noPinEntered, handleChoice} = require('./handler_ivr');
 
 /*
  * Redirection to subrouters
@@ -32,6 +32,11 @@ router.post('/mainMenu', (req, res) => {
 
 router.post('/noPinEntered', (req, res) => {
   res.send(noPinEntered());
+});
+
+// TODO debug : function currently used for debugging call problem
+router.get('/handleChoice/:myParam', function (req, res) {
+  res.send(handleChoice(req.params.myParam, req.body.Digits));
 });
 
 module.exports = router;

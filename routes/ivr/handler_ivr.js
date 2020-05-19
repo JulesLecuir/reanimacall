@@ -12,7 +12,8 @@ module.exports = {
     redirectWelcome,
     offerMainMenu,
     mainMenu,
-    noPinEntered
+    noPinEntered,
+    handleChoice
 };
 
 /**
@@ -20,7 +21,7 @@ module.exports = {
  */
 async function welcome(fromNumber) {
 
-    const fromNumberFormatted = Formatter.formatPhoneNumberForSpoken(fromNumber);
+    const fromNumberFormatted = Formatter.formatPhoneForSpoken(fromNumber);
 
     LOG.info(`Incoming call from number ${fromNumberFormatted}`);
 
@@ -64,7 +65,7 @@ function offerMainMenu() {
             method: 'POST',
         })
         .say(
-            voice.loop,
+            voice.normalLoop,
             'Si vous souhaitez envoyer une requête, tapez 1. ' + 'Si vous souhaitez ajouter un contact, tapez 2. ' +
             'Sinon, tapez 3 pour revenir au menu principal.'
         );
@@ -110,4 +111,10 @@ function noPinEntered() {
     twiml.hangup();
 
     return twiml.toString();
+}
+
+
+// TODO debug
+function handleChoice(myParam, digit) {
+    return `<Response><Say>You typed number ${digit} and the myParam variable is ${myParam}</Say>`
 }
