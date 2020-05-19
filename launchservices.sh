@@ -9,7 +9,7 @@ get_ngrok_url() {
 
 updatwilio(){
 	url="$(get_ngrok_url)$1"
-	twilio phone-numbers:update $PHONE_NUMBER_ID --voice-url=$url
+	twilio phone-numbers:update $TWILIO_PHONE_NUMBER_ID --voice-url=$url
 }
 
 # Start NGROK in background

@@ -55,10 +55,9 @@ Create a doc with those following variables, as below. The values correspond to 
 DB_HOST=mongodb://localhost:27017/
 PORT=3000
 
-
-# Phone number and phone number ID
-PHONE_NUMBER=+xxxxxxxxxxx
-PHONE_NUMBER_ID=PNxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+# Phone number (with country code) and phone number ID
+TWILIO_PHONE_NUMBER=+33xxxxxxxx
+TWILIO_PHONE_NUMBER_ID=PNxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 # Absolute path where the ngrok exectuable is located
 NGROK_EXECUTABLE=/home/$USER/ngrok
@@ -66,15 +65,11 @@ NGROK_EXECUTABLE=/home/$USER/ngrok
 # Twilio account SID and authorization token used to make outbound calls
 TWILIO_ACCOUNT_SID=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 TWILIO_AUTH_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-                  
-DB_HOST=mongodb://localhost:27017/
-PORT=3000
-
 ```
 
 #### Change the language options and database names in `config.json`
 
-Basically the language is french but you can adapt it to another language. Twilio Docs can show you how to do that.
+The language and diction options are listed in the variable `config.voice`. Basically the language is french but you can adapt it to another language. Twilio Docs can show you how to do that.
 
 #### And last but not least: `npm install`
 
