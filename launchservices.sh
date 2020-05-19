@@ -22,9 +22,9 @@ echo "--------------------------------------------"
 echo "|    STARTING MONGODB                      |"
 echo "--------------------------------------------"
 
-# Sleep while NGROK initialized a connection
+# Sleep while NGROK initializes a connection
 sleep 1
-echo "Please only type your password when ngrok has initialized the webhook URLs!"
+echo "Please only type your password when ngrok has initialized the webhook URLs."
 
 # Start MongoDB service
 sudo systemctl start mongod
@@ -35,7 +35,7 @@ echo "|    UPDATING TWILIO API WITH NGROK URL    |"
 echo "--------------------------------------------"
 
 # Update the Twilio voice URL with the new NGROK link
-updatwilio /ivr/welcome
+updatwilio $WEBHOOK_PATH
 
 echo ""
 echo "--------------------------------------------"

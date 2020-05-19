@@ -62,6 +62,11 @@ TWILIO_PHONE_NUMBER_ID=PNxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 # Absolute path where the ngrok exectuable is located
 NGROK_EXECUTABLE=/home/$USER/ngrok
 
+# This is the first address that Twilio will sent a request to when some user calls your number.
+# For example if WEBHOOK_PATH=/ivr/welcome, if a user call your Twilio number, Twilio will send a request to
+# the URL https://xxxxxxxx.ngrok.io/ivr/welcome.
+$WEBHOOK_PATH=/ivr/welcome
+
 # Twilio account SID and authorization token used to make outbound calls
 TWILIO_ACCOUNT_SID=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 TWILIO_AUTH_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -74,6 +79,19 @@ The language and diction options are listed in the variable `config.voice`. Basi
 #### And last but not least: `npm install`
 
 Run `npm` to install required modules and you'll be all set up.
+
+## Launch the app
+
+First of all, you need to execute the `launchservices.sh` script. All it does is:
+- launch ngrok and create a bridge to a new URL
+- update your Twilio API so the webhook matches the new generated ngrok URL.
+- launch MongoDB (and probably ask for your password cause it needs root access)
+- then display the ngrok URL
+- and for convenience purpose, display the PID of the ngrok instance, so you can kill it easily if you need to restart it for some reason.
+
+The terminal session that you used to launch the `launchservices.sh` script will stay frozen (probably because of ngrok running). I recommend keeping this session open and using another session to run your other commands.
+
+Once it's done, all you have to do is launch the app. Please see the `package.json` file to know which command to type.
 
 ## Final word
 I hope you'll enjoy working on the app! Leave me a comment if you face any issue.
