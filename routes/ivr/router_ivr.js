@@ -35,7 +35,7 @@ router.post('/noPinEntered', (req, res) => {
 });
 
 // TODO debug : function currently used for debugging call problem
-router.get('/handleChoice/:myParam', function (req, res) {
+router.post('/handleChoice/:myParam', function (req, res) {
   res.send(handleChoice(req.params.myParam, req.body.Digits));
 });
 

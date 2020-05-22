@@ -68,6 +68,7 @@ async function authPin(phone, pin, callSid) {
     return twiml.toString();
 }
 
+
 function offerRecordMessage() {
 
     const twiml = new VoiceResponse();
@@ -177,9 +178,9 @@ async function askContactRecursive(phone, contactsNumbers, contactIndex, message
     // "123" is the myParam variable I want to pass
     twiml
         .gather({
-            action: '/ivr/handleChoice/123',
+            action: 'https://5d606f96.ngrok.io/ivr/handleChoice/123',
             numDigits: '1',
-            method: 'GET'
+            method: 'POST'
             // I use get because I couldn't figure a better way to pass a variable to the function #handleChoice
             // than this way. Maybe you have a better idea?
         })
