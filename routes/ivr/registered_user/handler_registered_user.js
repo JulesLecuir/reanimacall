@@ -160,10 +160,15 @@ async function addContact(phone, contactNumber) {
 async function launchContactingProcedure(callSid, messageUrl) {
 
     // retrieve contacts
-    const {phone, contacts: contactsNumbers} = await UserService.getOneLean({callSid: callSid}, {
-        phone: true,
-        contacts: true
-    });
+    const [{phone, contacts: contactsNumbers}, _] = await Promise.all(
+        [
+            UserService.getOne({callSid: callSid}, {
+                phone: true,
+                contacts: true,
+            }),
+            UserService.update({callSid: callSid}, {status: 'waiting'})
+        ]
+    )
 
     // contact the first person (ie. contactIndex = 0)
     const contactAgreedIndex = askContactRecursive(phone, contactsNumbers, 0, messageUrl);
